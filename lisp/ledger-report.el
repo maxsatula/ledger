@@ -65,6 +65,11 @@ text that should replace the format specifier."
   :type 'alist
   :group 'ledger-report)
 
+(defcustom ledger-report-auto-refresh t
+	"If t then automatically rerun the report when the ledger buffer is saved."
+	:type 'boolean
+	:group 'ledger-report)
+
 (defvar ledger-report-buffer-name "*Ledger Report*")
 
 (defvar ledger-report-name nil)
@@ -360,18 +365,26 @@ Optional EDIT the command."
 (defun ledger-report-redo ()
   "Redo the report in the current ledger report buffer."
   (interactive)
-  (ledger-report-goto)
-  (setq buffer-read-only nil)
-  (erase-buffer)
-  (ledger-do-report ledger-report-cmd)
-  (setq buffer-read-only nil))
+	(let ((cur-buf (current-buffer)))
+ 		(if (and ledger-report-auto-refresh
+				 (string= mode-name "Ledger")
+				 (get-buffer ledger-report-buffer-name))
+				(progn
+
+					(pop-to-buffer (get-buffer ledger-report-buffer-name))
+					(shrink-window-if-larger-than-buffer)
+					(setq buffer-read-only nil)
+					(erase-buffer)
+					(ledger-do-report ledger-report-cmd)
+					(setq buffer-read-only nil)
+					(pop-to-buffer cur-buf)))))
 
 (defun ledger-report-quit ()
-  "Quit the ledger report buffer by burying it."
-  (interactive)
-  (ledger-report-goto)
-  (set-window-configuration ledger-original-window-cfg)
-  (bury-buffer (get-buffer ledger-report-buffer-name)))
+	"Quit the ledger report buffer."
+	(interactive)
+	(ledger-report-goto)
+	(set-window-configuration ledger-original-window-cfg)
+	(kill-buffer (get-buffer ledger-report-buffer-name)))
 
 (defun ledger-report-kill ()
   "Kill the ledger report buffer."

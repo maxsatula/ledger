@@ -394,7 +394,11 @@ Alias for
 .Fl \-basis .
 .It Fl \-count
 Direct ledger to report the number of items when appended to the
-commodities, accounts or payees command.
+.Nm commodities ,
+.Nm accounts
+or
+.Nm payees
+commands.
 .It Fl \-csv-format Ar FMT
 Specify the format to use for the
 .Nm csv
@@ -794,6 +798,8 @@ Show only un-budgeted postings.
 .It Fl \-uncleared Pq Fl U
 Use only uncleared transactions in calculations and reports.
 .It Fl \-unrealized
+Show generated unrealized gain and loss accounts in the balance
+report.
 .It Fl \-unrealized-gains
 Allow the user to specify what account name should be used for
 unrealized gains. Defaults to
@@ -812,6 +818,9 @@ file to change the default.
 Perform all calculations without rounding and display results to full
 precision.
 .It Fl \-values
+Shows the values used by each tag when used in combination with the
+.Nm tags
+command.
 .It Fl \-value-expr Ar EXPR
 .It Fl \-verbose
 Print detailed information on the execution of Ledger.
